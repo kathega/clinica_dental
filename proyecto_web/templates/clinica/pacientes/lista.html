@@ -1,0 +1,170 @@
+{% extends 'clinica/base.html' %}
+
+{% block title %}Pacientes - Clínica Dental{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-purple">
+                <i class="fas fa-users"></i> Gestión de Pacientes
+            </h2>
+            <a href="{% url 'clinica:crear_paciente' %}" class="btn btn-purple">
+                <i class="fas fa-plus"></i> Nuevo Paciente
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Búsqueda -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-10">
+                        {{ form_busqueda.termino }}
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-purple w-100">
+                            <i class="fas fa-search"></i> Buscar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Lista de Pacientes -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-list"></i> 
+                    Lista de Pacientes 
+                    {% if form_busqueda.cleaned_data.termino %}
+                        (Resultados de búsqueda: "{{ form_busqueda.cleaned_data.termino }}")
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if pacientes %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Cédula</th>
+                                    <th>Teléfono</th>
+                                    <th>Edad</th>
+                                    <th>Fecha de Nacimiento</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for paciente in pacientes %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ paciente.nombre }}</strong>
+                                    </td>
+                                    <td>{{ paciente.cedula }}</td>
+                                    <td>{{ paciente.telefono }}</td>
+                                    <td>{{ paciente.edad }} años</td>
+                                    <td>{{ paciente.fecha_nacimiento|date:"d/m/Y" }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'clinica:detalle_paciente' paciente.pk %}" 
+                                               class="btn btn-info" title="Ver Ficha">
+                                                <i class="fas fa-file-medical"></i>
+                                            </a>
+                                            <a href="{% url 'clinica:editar_paciente' paciente.pk %}" 
+                                               class="btn btn-warning" title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="post" action="{% url 'clinica:eliminar_paciente' paciente.pk %}" 
+                                                  style="display: inline;" 
+                                                  onsubmit="return confirm('¿Está seguro de eliminar este paciente?')">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger" title="Eliminar">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">
+                            {% if form_busqueda.cleaned_data.termino %}
+                                No se encontraron pacientes con "{{ form_busqueda.cleaned_data.termino }}"
+                            {% else %}
+                                No hay pacientes registrados
+                            {% endif %}
+                        </h4>
+                        <p class="text-muted">
+                            {% if form_busqueda.cleaned_data.termino %}
+                                Intenta con otro término de búsqueda
+                            {% else %}
+                                Comienza registrando tu primer paciente
+                            {% endif %}
+                        </p>
+                        {% if not form_busqueda.cleaned_data.termino %}
+                            <a href="{% url 'clinica:crear_paciente' %}" class="btn btn-purple">
+                                <i class="fas fa-plus"></i> Registrar Primer Paciente
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Estadísticas -->
+{% if pacientes %}
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card bg-purple text-white">
+            <div class="card-body text-center">
+                <i class="fas fa-users fa-2x mb-2"></i>
+                <h3>{{ pacientes.count }}</h3>
+                <p>Total de Pacientes</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-purple-light text-center">
+            <div class="card-body">
+                <i class="fas fa-birthday-cake fa-2x mb-2 text-purple"></i>
+                <h3 class="text-purple">
+                    {% with edades=pacientes|list:'edad' %}
+                        {% if edades %}
+                            {{ edades|sum|floatformat:0|add:"0"|div:edades|length|floatformat:1 }}
+                        {% else %}
+                            0
+                        {% endif %}
+                    {% endwith %}
+                </h3>
+                <p class="text-purple">Edad Promedio</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-purple-light text-center">
+            <div class="card-body">
+                <i class="fas fa-phone fa-2x mb-2 text-purple"></i>
+                <h3 class="text-purple">{{ pacientes.count }}</h3>
+                <p class="text-purple">Contactos Registrados</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

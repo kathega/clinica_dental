@@ -1,0 +1,259 @@
+{% extends 'clinica/base.html' %}
+
+{% block title %}Ficha de {{ paciente.nombre }} - Clínica Dental{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-purple">
+                <i class="fas fa-file-medical"></i> Ficha Clínica
+            </h2>
+            <div>
+                <a href="{% url 'clinica:crear_historial' paciente.pk %}" class="btn btn-purple me-2">
+                    <i class="fas fa-plus"></i> Agregar Registro
+                </a>
+                <a href="{% url 'clinica:editar_paciente' paciente.pk %}" class="btn btn-warning me-2">
+                    <i class="fas fa-edit"></i> Editar Paciente
+                </a>
+                <a href="{% url 'clinica:lista_pacientes' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Información del Paciente -->
+<div class="row mb-4">
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header bg-purple text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-user"></i> Datos del Paciente
+                </h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <td><strong>Nombre:</strong></td>
+                        <td>{{ paciente.nombre }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cédula:</strong></td>
+                        <td>{{ paciente.cedula }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Teléfono:</strong></td>
+                        <td>{{ paciente.telefono }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Edad:</strong></td>
+                        <td>{{ paciente.edad }} años</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fecha Nacimiento:</strong></td>
+                        <td>{{ paciente.fecha_nacimiento|date:"d/m/Y" }}</td>
+                    </tr>
+                    {% if paciente.direccion %}
+                    <tr>
+                        <td><strong>Dirección:</strong></td>
+                        <td>{{ paciente.direccion }}</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td><strong>Registrado:</strong></td>
+                        <td>{{ paciente.fecha_creacion|date:"d/m/Y H:i" }}</td>
+                    </tr>
+                </table>
+                
+                {% if paciente.notas_medicas %}
+                    <div class="mt-3">
+                        <h6><i class="fas fa-notes-medical"></i> Notas Médicas</h6>
+                        <div class="alert alert-light">
+                            {{ paciente.notas_medicas|linebreaks }}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-8">
+        <!-- Historial Clínico -->
+        <div class="card mb-3">
+            <div class="card-header bg-purple text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-history"></i> Historial Clínico
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if historial %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Tipo</th>
+                                    <th>Descripción</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for registro in historial %}
+                                <tr>
+                                    <td>{{ registro.fecha|date:"d/m/Y" }}</td>
+                                    <td>
+                                        {% if registro.tipo == 'procedimiento' %}
+                                            <span class="badge bg-primary">Procedimiento</span>
+                                        {% elif registro.tipo == 'tratamiento' %}
+                                            <span class="badge bg-info">Tratamiento</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">Observación</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <strong>{{ registro.descripcion|truncatechars:50 }}</strong>
+                                        {% if registro.notas %}
+                                            <br><small class="text-muted">{{ registro.notas|truncatechars:80 }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'clinica:editar_historial' registro.pk %}" 
+                                               class="btn btn-outline-primary" title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="post" action="{% url 'clinica:eliminar_historial' registro.pk %}" 
+                                                  style="display: inline;" 
+                                                  onsubmit="return confirm('¿Está seguro de eliminar este registro?')">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-outline-danger" title="Eliminar">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-history fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No hay registros clínicos</h5>
+                        <p class="text-muted">Este paciente aún no tiene historial médico registrado</p>
+                        <a href="{% url 'clinica:crear_historial' paciente.pk %}" class="btn btn-purple">
+                            <i class="fas fa-plus"></i> Agregar Primer Registro
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Citas del Paciente -->
+        <div class="card">
+            <div class="card-header bg-purple text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-calendar"></i> Citas del Paciente
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if citas %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Fecha y Hora</th>
+                                    <th>Motivo</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cita in citas %}
+                                <tr>
+                                    <td>{{ cita.fecha_hora|date:"d/m/Y H:i" }}</td>
+                                    <td>{{ cita.motivo }}</td>
+                                    <td>
+                                        {% if cita.estado == 'pendiente' %}
+                                            <span class="badge bg-warning">Pendiente</span>
+                                        {% elif cita.estado == 'atendida' %}
+                                            <span class="badge bg-success">Atendida</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Cancelada</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'clinica:editar_cita' cita.pk %}" 
+                                               class="btn btn-outline-primary" title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No hay citas registradas</h5>
+                        <p class="text-muted">Este paciente aún no tiene citas agendadas</p>
+                        <a href="{% url 'clinica:crear_cita' %}" class="btn btn-purple">
+                            <i class="fas fa-plus"></i> Agendar Primera Cita
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Estadísticas del Paciente -->
+<div class="row">
+    <div class="col-md-3">
+        <div class="card bg-purple text-white text-center">
+            <div class="card-body">
+                <i class="fas fa-history fa-2x mb-2"></i>
+                <h3>{{ historial.count }}</h3>
+                <p>Registros Clínicos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-purple-light text-center">
+            <div class="card-body">
+                <i class="fas fa-calendar fa-2x mb-2 text-purple"></i>
+                <h3 class="text-purple">{{ citas.count }}</h3>
+                <p class="text-purple">Total de Citas</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white text-center">
+            <div class="card-body">
+                <i class="fas fa-check-circle fa-2x mb-2"></i>
+                <h3>
+                    {{ citas|dictsort:"estado"|filter:"estado:atendida"|list|length }}
+                </h3>
+                <p>Citas Atendidas</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white text-center">
+            <div class="card-body">
+                <i class="fas fa-clock fa-2x mb-2"></i>
+                <h3>
+                    {{ citas|dictsort:"estado"|filter:"estado:pendiente"|list|length }}
+                </h3>
+                <p>Citas Pendientes</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

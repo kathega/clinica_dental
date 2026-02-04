@@ -1,0 +1,546 @@
+/* ============================================
+   Variables de Color - Tema Clínica Dental
+   ============================================ */
+:root {
+    --purple-primary: #9b59b6;
+    --purple-light: #c39bd3;
+    --purple-dark: #7d3c98;
+    --purple-pastel: #e8daef;
+    --white: #ffffff;
+    --gray-light: #f8f9fa;
+    --gray-medium: #6c757d;
+    --gray-dark: #495057;
+    --success: #28a745;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --info: #17a2b8;
+}
+
+/* ============================================
+   Estilos Generales
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--gray-light);
+    color: var(--gray-dark);
+    line-height: 1.6;
+}
+
+/* ============================================
+   Navbar
+   ============================================ */
+.navbar {
+    background-color: var(--white) !important;
+    box-shadow: 0 2px 10px rgba(155, 89, 182, 0.1);
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--purple-primary) !important;
+}
+
+.navbar-brand i {
+    margin-right: 0.5rem;
+    font-size: 1.8rem;
+}
+
+.nav-link {
+    color: var(--gray-dark) !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem !important;
+    margin: 0 0.25rem;
+    border-radius: 8px;
+}
+
+.nav-link:hover {
+    background-color: var(--purple-pastel);
+    color: var(--purple-primary) !important;
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   Botones Personalizados
+   ============================================ */
+.btn-purple {
+    background-color: var(--purple-primary);
+    color: var(--white);
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+}
+
+.btn-purple:hover {
+    background-color: var(--purple-dark);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(155, 89, 182, 0.4);
+}
+
+.btn-outline-purple {
+    background-color: transparent;
+    color: var(--purple-primary);
+    border: 2px solid var(--purple-primary);
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-purple:hover {
+    background-color: var(--purple-primary);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   Cards
+   ============================================ */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    background-color: var(--purple-primary);
+    color: var(--white);
+    border: none;
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+}
+
+.bg-purple {
+    background-color: var(--purple-primary) !important;
+}
+
+.text-purple {
+    color: var(--purple-primary) !important;
+}
+
+/* ============================================
+   Tarjetas de Pacientes
+   ============================================ */
+.paciente-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--purple-primary);
+}
+
+.paciente-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(155, 89, 182, 0.2);
+}
+
+.paciente-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple-light), var(--purple-primary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.paciente-info h5 {
+    color: var(--purple-primary);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.paciente-info p {
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+    color: var(--gray-medium);
+}
+
+.paciente-acciones {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* ============================================
+   Tablas
+   ============================================ */
+.table {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.table thead {
+    background-color: var(--purple-primary);
+    color: var(--white);
+}
+
+.table thead th {
+    border: none;
+    padding: 1rem;
+    font-weight: 600;
+}
+
+.table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.table tbody tr:hover {
+    background-color: var(--purple-pastel);
+}
+
+.table tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-color: var(--gray-light);
+}
+
+/* ============================================
+   Formularios
+   ============================================ */
+.form-control {
+    border: 2px solid var(--gray-light);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.form-control:focus {
+    border-color: var(--purple-primary);
+    box-shadow: 0 0 0 0.2rem rgba(155, 89, 182, 0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--gray-dark);
+    margin-bottom: 0.5rem;
+}
+
+.form-select {
+    border: 2px solid var(--gray-light);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-select:focus {
+    border-color: var(--purple-primary);
+    box-shadow: 0 0 0 0.2rem rgba(155, 89, 182, 0.25);
+}
+
+.input-group-text {
+    background-color: var(--purple-pastel);
+    border: 2px solid var(--purple-light);
+    color: var(--purple-primary);
+}
+
+/* ============================================
+   Modal
+   ============================================ */
+.modal-content {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    border-radius: 12px 12px 0 0;
+    border: none;
+}
+
+.modal-footer {
+    border: none;
+    border-radius: 0 0 12px 12px;
+}
+
+/* ============================================
+   Calendario
+   ============================================ */
+.calendario {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.calendario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.calendario-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+}
+
+.calendario-dia {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.calendario-dia:hover {
+    background-color: var(--purple-pastel);
+}
+
+.calendario-dia.hoy {
+    background-color: var(--purple-primary);
+    color: var(--white);
+}
+
+.calendario-dia.con-cita {
+    background-color: var(--purple-light);
+    color: var(--white);
+}
+
+/* ============================================
+   Citas
+   ============================================ */
+.cita-card {
+    background: var(--white);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    border-left: 4px solid var(--purple-primary);
+    transition: all 0.3s ease;
+}
+
+.cita-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(155, 89, 182, 0.2);
+}
+
+.cita-estado {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.cita-estado.pendiente {
+    background-color: var(--warning);
+    color: var(--white);
+}
+
+.cita-estado.atendida {
+    background-color: var(--success);
+    color: var(--white);
+}
+
+.cita-estado.cancelada {
+    background-color: var(--danger);
+    color: var(--white);
+}
+
+/* ============================================
+   Historial Clínico
+   ============================================ */
+.historial-seccion {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.historial-seccion h6 {
+    color: var(--purple-primary);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--purple-pastel);
+    padding-bottom: 0.5rem;
+}
+
+.tratamiento-item {
+    background: var(--gray-light);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    border-left: 3px solid var(--purple-primary);
+}
+
+.observacion-item {
+    background: var(--purple-pastel);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    font-style: italic;
+}
+
+/* ============================================
+   Estados de Sección
+   ============================================ */
+.seccion-activa {
+    display: block;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.seccion-inactiva {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.75rem 0;
+    }
+    
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    .paciente-card {
+        padding: 1rem;
+    }
+    
+    .paciente-acciones {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .table {
+        font-size: 0.85rem;
+    }
+    
+    .modal-dialog {
+        margin: 1rem;
+    }
+    
+    .calendario-grid {
+        gap: 0.25rem;
+    }
+    
+    .calendario-dia {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .container-fluid {
+        padding: 0.5rem;
+    }
+    
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .paciente-avatar {
+        width: 50px;
+        height: 50px;
+        font-size: 1rem;
+    }
+}
+
+/* ============================================
+   Loading y Animaciones
+   ============================================ */
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--purple-pastel);
+    border-top: 4px solid var(--purple-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ============================================
+   Estados Vacíos
+   ============================================ */
+.estado-vacio {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--gray-medium);
+}
+
+.estado-vacio i {
+    font-size: 4rem;
+    color: var(--purple-light);
+    margin-bottom: 1rem;
+}
+
+.estado-vacio h5 {
+    color: var(--gray-dark);
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   Utilidades
+   ============================================ */
+.text-muted-custom {
+    color: var(--gray-medium) !important;
+}
+
+.bg-light-custom {
+    background-color: var(--gray-light) !important;
+}
+
+.border-purple {
+    border-color: var(--purple-primary) !important;
+}
+
+.shadow-purple {
+    box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3) !important;
+}

@@ -1,0 +1,187 @@
+{% extends 'clinica/base.html' %}
+
+{% block title %}Inicio - Clínica Dental{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="text-center mb-5">
+            <h1 class="display-4 text-purple fw-bold">
+                <i class="fas fa-tooth"></i> Clínica Dental
+            </h1>
+            <p class="lead">Sistema de Gestión Integral</p>
+        </div>
+    </div>
+</div>
+
+<!-- Estadísticas -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="stats-card text-center">
+            <i class="fas fa-users fa-2x mb-2"></i>
+            <h3>{{ total_pacientes }}</h3>
+            <p>Pacientes Registrados</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card text-center">
+            <i class="fas fa-calendar-check fa-2x mb-2"></i>
+            <h3>{{ total_citas }}</h3>
+            <p>Total de Citas</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card text-center">
+            <i class="fas fa-clock fa-2x mb-2"></i>
+            <h3>{{ citas_hoy }}</h3>
+            <p>Citas Hoy</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card text-center">
+            <i class="fas fa-chart-line fa-2x mb-2"></i>
+            <h3>100%</h3>
+            <p>Disponibilidad</p>
+        </div>
+    </div>
+</div>
+
+<!-- Acciones Rápidas -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-bolt"></i> Acciones Rápidas</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <a href="{% url 'clinica:crear_paciente' %}" class="btn btn-purple btn-lg w-100">
+                            <i class="fas fa-user-plus"></i><br>
+                            Nuevo Paciente
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{% url 'clinica:crear_cita' %}" class="btn btn-purple btn-lg w-100">
+                            <i class="fas fa-calendar-plus"></i><br>
+                            Agendar Cita
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{% url 'clinica:lista_pacientes' %}" class="btn btn-outline-purple btn-lg w-100">
+                            <i class="fas fa-search"></i><br>
+                            Buscar Pacientes
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{% url 'clinica:lista_citas' %}" class="btn btn-outline-purple btn-lg w-100">
+                            <i class="fas fa-calendar-alt"></i><br>
+                            Ver Calendario
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Próximas Citas -->
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-calendar"></i> Próximas Citas</h5>
+            </div>
+            <div class="card-body">
+                {% if proximas_citas %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Paciente</th>
+                                    <th>Fecha y Hora</th>
+                                    <th>Motivo</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cita in proximas_citas %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'clinica:detalle_paciente' cita.paciente.pk %}" class="text-decoration-none">
+                                            {{ cita.paciente.nombre }}
+                                        </a>
+                                    </td>
+                                    <td>{{ cita.fecha_hora|date:"d/m/Y H:i" }}</td>
+                                    <td>{{ cita.motivo }}</td>
+                                    <td>
+                                        {% if cita.estado == 'pendiente' %}
+                                            <span class="badge bg-warning">Pendiente</span>
+                                        {% elif cita.estado == 'atendida' %}
+                                            <span class="badge bg-success">Atendida</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Cancelada</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'clinica:editar_cita' cita.pk %}" class="btn btn-outline-primary">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No hay próximas citas programadas</p>
+                        <a href="{% url 'clinica:crear_cita' %}" class="btn btn-purple">
+                            <i class="fas fa-plus"></i> Agendar Primera Cita
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sistema Información -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-info-circle"></i> Sistema</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-database"></i> Base de Datos</span>
+                        <span class="badge bg-purple rounded-pill">SQLite</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-code"></i> Framework</span>
+                        <span class="badge bg-purple rounded-pill">Django</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-server"></i> Servidor</span>
+                        <span class="badge bg-purple rounded-pill">Local</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-user-shield"></i> Acceso</span>
+                        <span class="badge bg-purple rounded-pill">Personal</span>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <a href="/admin/" class="btn btn-purple btn-sm w-100">
+                        <i class="fas fa-cog"></i> Panel de Administración
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

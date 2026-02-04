@@ -1,0 +1,99 @@
+{% extends 'clinica/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold">
+                <i class="fas fa-calendar-alt text-purple"></i> Gestión de Citas
+            </h2>
+            <a href="{% url 'clinica:crear_cita' %}" class="btn btn-purple btn-primary">
+                <i class="fas fa-plus"></i> Nueva Cita
+            </a>
+        </div>
+
+        <div class="row">
+            <!-- Calendar/Filter -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Filtrar por Fecha</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="get">
+                            <div class="mb-3">
+                                <input type="date" name="fecha" class="form-control" value="{{ fecha_seleccionada }}"
+                                    onchange="this.form.submit()">
+                            </div>
+                        </form>
+                        <hr>
+                        <h6>Citas para el {{ fecha_obj|date:"d" }} de {{ fecha_obj|date:"F, Y" }}</h6>
+                        <div class="list-group list-group-flush mt-3">
+                            {% for cita in citas_dia %}
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">{{ cita.paciente.nombre }}</h6>
+                                    <small>{{ cita.fecha_hora|date:"H:i" }}</small>
+                                </div>
+                                <p class="mb-1 small">{{ cita.motivo }}</p>
+                                <small class="text-{{ cita.estado|yesno:'success,warning' }}">{{ cita.get_estado_display
+                                    }}</small>
+                            </div>
+                            {% empty %}
+                            <div class="text-muted small">No hay citas para este día.</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- All Appointments Table -->
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Todas las Próximas Citas</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Fecha y Hora</th>
+                                    <th>Paciente</th>
+                                    <th>Motivo</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cita in citas %}
+                                <tr>
+                                    <td>{{ cita.fecha_hora|date:"d/m/Y H:i" }}</td>
+                                    <td><a href="{% url 'clinica:detalle_paciente' cita.paciente.pk %}">{{
+                                            cita.paciente.nombre }}</a></td>
+                                    <td>{{ cita.motivo }}</td>
+                                    <td><span class="badge bg-secondary">{{ cita.get_estado_display }}</span></td>
+                                    <td>
+                                        <a href="{% url 'clinica:editar_cita' cita.pk %}"
+                                            class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
+                                        <form method="post" action="{% url 'clinica:eliminar_cita' cita.pk %}"
+                                            class="d-inline" onsubmit="return confirm('¿Borrar cita?');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-outline-danger border-0"><i
+                                                    class="fas fa-trash"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center py-4">No hay citas registradas.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
